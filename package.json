@@ -1,0 +1,23 @@
+{
+  "name": "movies-explorer-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint .",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ValeriyVStolyar/movies-explorer-api.git"
+  },
+  "keywords": [],
+  "author": "ValeriyVStolyar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ValeriyVStolyar/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/ValeriyVStolyar/movies-explorer-api#readme"
+}
