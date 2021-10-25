@@ -2,7 +2,7 @@
   "name": "movies-explorer-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint .",
@@ -19,5 +19,29 @@
   "bugs": {
     "url": "https://github.com/ValeriyVStolyar/movies-explorer-api/issues"
   },
-  "homepage": "https://github.com/ValeriyVStolyar/movies-explorer-api#readme"
+  "homepage": "https://github.com/ValeriyVStolyar/movies-explorer-api#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-react": "^7.26.1",
+    "nodemon": "^2.0.14"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "celebrate": "^15.0.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-winston": "^4.2.0",
+    "helmet": "^4.6.0",
+    "install": "^0.13.0",
+    "joi": "^17.4.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.12",
+    "npm": "^8.1.0",
+    "validator": "^13.6.0",
+    "winston": "^3.3.3"
+  }
 }
