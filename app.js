@@ -9,6 +9,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
 const router = require('./routes/index');
 const limiter = require('./middlewares/limiter');
+
 const { PORT = 3000, NODE_ENV, MONGO_URL } = process.env;
 const app = express();
 
@@ -33,4 +34,4 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : 'mongodb://localhost:27
 app.use(errorLogger);
 app.use(errors());
 app.use(errorsHandle);
-app.listen(PORT)
+app.listen(PORT);

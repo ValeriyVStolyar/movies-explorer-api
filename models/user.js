@@ -4,28 +4,12 @@ const bcrypt = require('bcrypt');
 const EmailOrPasswordError = require('../errors/email-password-err');
 
 const userSchema = new mongoose.Schema({
-  name: { // у пользователя есть имя — опишем требования к имени в схеме:
-    type: String, // имя — это строка
-    minlength: 2, // минимальная длина имени — 2 символа
-    maxlength: 30, // а максимальная — 30 символов
-    // default: 'Let`s your name`s Vasya',
+  name: {
+    type: String,
+    minlength: 2,
+    maxlength: 30,
     required: true,
   },
-  // about: {
-  //   type: String,
-  //   minlength: 2,
-  //   maxlength: 30,
-  //   default: 'Исследователь',
-  // },
-  // avatar: {
-  //   type: String,
-  //   validate: {
-  //     validator(v) {
-  //       return validator.isURL(v);
-  //     },
-  //   },
-  //   default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
-  // },
   email: {
     type: String,
     validate: {
@@ -63,7 +47,7 @@ userSchema.statics.findUserByCredentials = function shemaWithoutTheName(email, p
           if (!matched) {
             return Promise.reject(new EmailOrPasswordError());
           }
-          return user; // теперь user доступен
+          return user;
         });
     });
 };

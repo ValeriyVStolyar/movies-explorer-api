@@ -82,31 +82,30 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.logout = (req, res, next) => {
-  res.clearCookie('jwt').send({ message: 'Cookies удалены'});
-}
+  res.clearCookie('jwt').send({ message: 'Cookies удалены' });
+  next();
+};
 
 module.exports.updateUser = (req, res, next) => {
   const { email, name } = req.body;
 
   User.findByIdAndUpdate(
-    // req.user._id, { name, about }, { new: true, runValidators: true },
     req.user._id, { email, name }, { new: true, runValidators: true },
   )
     .orFail(new NotFoundIdError('Пользователь по указанному _id не найден.'))
     .then((user) => {
-      console.log(user)
       res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next (new ValidationError());
+        return next(new ValidationError());
       } if (err.message === 'NotValidId') {
-        return next (new NotFoundIdError('Пользователь по указанному _id не найден.'));
+        return next(new NotFoundIdError('Пользователь по указанному _id не найден.'));
       } if (err.name === 'ValidationError') {
-        return next (new WrongDataError('Переданы некорректные данные при обновлении профиля.'));
+        return next(new WrongDataError('Переданы некорректные данные при обновлении профиля.'));
       } if (err.name === 'IdError') {
-        return next (new NotFoundIdError('Пользователь по указанному _id не найден.'));
+        return next(new NotFoundIdError('Пользователь по указанному _id не найден.'));
       }
       return next(err);
-    })
+    });
 };
