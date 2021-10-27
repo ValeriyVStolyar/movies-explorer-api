@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
+const { regExp } = require('./reg-exp');
 
 const validateUserBody = celebrate({
   body: Joi.object().keys({
@@ -25,18 +26,16 @@ const validateMovieBody = celebrate({
   body: Joi.object().keys({
     country: Joi.string().required(),
     director: Joi.string().required(),
-    duration: Joi.string().required(),
+    duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required()
-      .pattern(/^https?:\/{2}(w{3}\.)?((((\w+[-]*))*)\.[a-z]{2,6}((\/?\w+\/?){1,9})?|(((\w*\.){1,9}([a-z]){1,6}(\/\w*[-]*){1,9}(\w*)(\.[a-z]+))))(#)?/),
-    trailer: Joi.string().required()
-      .pattern(/^https?:\/{2}(w{3}\.)?((((\w+[-]*))*)\.[a-z]{2,6}((\/?\w+\/?){1,9})?|(((\w*\.){1,9}([a-z]){1,6}(\/\w*[-]*){1,9}(\w*)(\.[a-z]+))))(#)?/),
-    thumbnail: Joi.string().required()
-      .pattern(/^https?:\/{2}(w{3}\.)?((((\w+[-]*))*)\.[a-z]{2,6}((\/?\w+\/?){1,9})?|(((\w*\.){1,9}([a-z]){1,6}(\/\w*[-]*){1,9}(\w*)(\.[a-z]+))))(#)?/),
-    // movieId: Joi.object.keys({
-    //   movieId:Joi.number().required,
-    // }),
+    image: Joi.string().required().pattern(regExp),
+    // image: Joi.string().required().pattern(/^https?:\/{2}(w{3}\.)?((((\w+[-]*))*)\.[a-z]{2,6}((\/?\w+\/?){1,9})?|(((\w*\.){1,9}([a-z]){1,6}(\/\w*[-]*){1,9}(\w*)(\.[a-z]+))))(#)?/),
+    trailer: Joi.string().required().pattern(regExp),
+    // trailer: Joi.string().required().pattern(/^https?:\/{2}(w{3}\.)?((((\w+[-]*))*)\.[a-z]{2,6}((\/?\w+\/?){1,9})?|(((\w*\.){1,9}([a-z]){1,6}(\/\w*[-]*){1,9}(\w*)(\.[a-z]+))))(#)?/),
+    thumbnail: Joi.string().required().pattern(regExp),
+    // thumbnail: Joi.string().required().pattern(/^https?:\/{2}(w{3}\.)?((((\w+[-]*))*)\.[a-z]{2,6}((\/?\w+\/?){1,9})?|(((\w*\.){1,9}([a-z]){1,6}(\/\w*[-]*){1,9}(\w*)(\.[a-z]+))))(#)?/),
+    movieId:Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),

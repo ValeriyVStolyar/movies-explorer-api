@@ -1,4 +1,3 @@
-// const { celebrate, Joi } = require('celebrate');
 const router = require('express').Router();
 const auth = require('../middlewares/auth');
 const moviesRouter = require('./movies');
@@ -12,14 +11,12 @@ const
   } = require('../controllers/users');
 
 router.post('/signup', validateUserBody, createUser);
-
 router.post('/signin', validateAuthentication, login);
 
 router.use((req, res, next) => {
   req.user = {
-    _id: '617270a1d1da913882a5bba7' // вставьте сюда _id созданного в предыдущем пункте пользователя
+    _id: '61728d11444a3812f001d5c1' // вставьте сюда _id созданного в предыдущем пункте пользователя
   };
-  // console.log(req.user)
   next();
 });
 

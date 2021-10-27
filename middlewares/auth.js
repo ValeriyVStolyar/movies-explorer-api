@@ -17,10 +17,10 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
-    next(new AuthorizationError('Необходимо авторизоваться!'));
+    return next(new AuthorizationError('Необходимо авторизоваться!'));
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
 
-  next(); // пропускаем запрос дальше
+  return next(); // пропускаем запрос дальше
 };

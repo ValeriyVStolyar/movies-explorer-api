@@ -58,10 +58,9 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: { // id фильма, который содержится в ответе сервиса MoviesExplorer
-    type: mongoose.Schema.Types.ObjectId,
-    // type: number,
+    type: Number,
     ref: 'user',
-    // required: true,
+    required: true,
   },
   nameRU: {
     type: String,
@@ -71,11 +70,6 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // likes: [{
-  //   type: mongoose.Schema.Types.ObjectId, // список лайкнувших пост пользователей
-  //   ref: 'user',
-  //   default: [],
-  // }],
   createdAt: {
     type: Date,
     default: Date.now,
