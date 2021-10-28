@@ -34,4 +34,4 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : 'mongodb://localhost:27
 app.use(errorLogger);
 app.use(errors());
 app.use(errorsHandle);
-app.listen(PORT);
+app.listen(PORT, () => console.log('ok'));
