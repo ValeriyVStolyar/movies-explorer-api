@@ -6,8 +6,8 @@ const allowedCors = [
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:5000',
-  'http://vvs-mesto.nomoredomains.club',
-  'https://vvs-mesto.nomoredomains.club',
+  'http://vvs-movie.nomoredomains.rocks',
+  'https://vvs-movie.nomoredomains.rocks',
 ];
 
 module.exports = (req, res, next) => {
