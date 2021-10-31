@@ -4,57 +4,57 @@ const jwt = require('jsonwebtoken');
 const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
 const NotFoundIdError = require('../errors/not-found-id-err');
-const ValidationError = require('../errors/cast-err');
-const EmptyFieldError = require('../errors/empty-field-err');
-const ExistUserError = require('../errors/exist-user-err');
-const WrongDataError = require('../errors/data_err');
+const ConflictError = require('../errors/conflict_err');
+const BadRequestError = require('../errors/bad-request-err');
+const {
+  BAD_REQUEST_ERROR_MESSAGE, CONFLICT_ERROR_MESSAGE,
+  VALIDATION_ERROR, NOT_FOUND_USER_ERROR_MESSAGE,
+} = require('../utils/constants');
 
 const CREATE_OK = 201;
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(new NotFoundIdError('Пользователь по указанному _id не найден.'))
+    .orFail(new NotFoundIdError(NOT_FOUND_USER_ERROR_MESSAGE))
     .then((user) => {
       res.send({ data: user });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        throw new ValidationError();
+      if (err.message === NOT_FOUND_USER_ERROR_MESSAGE) {
+        return next(new NotFoundIdError(NOT_FOUND_USER_ERROR_MESSAGE));
       }
-      next(err);
-    })
-    .catch(next);
+      return next(err);
+    });
 };
 
 module.exports.createUser = (req, res, next) => {
   const {
     name, email, password,
   } = req.body;
-  if (!email || !password) {
-    throw new EmptyFieldError();
-  }
 
   User.findOne({ email })
     .then((userr) => {
       if (userr) {
-        throw new ExistUserError();
-      } else {
-        bcrypt.hash(password, 10)
-          .then((hash) => {
-            User.create({
-              name, email, password: hash,
-            })
-              .then((user) => {
-                res.status(CREATE_OK).send({ data: user.toJSON() });
-              })
-              .catch((err) => {
-                if (err.name === 'ValidationError') {
-                  throw new WrongDataError('Переданы некорректные данные при создании пользователя.');
-                }
-                next(err);
-              });
-          });
+        next(new ConflictError(CONFLICT_ERROR_MESSAGE));
       }
+      bcrypt.hash(password, 10)
+        .then((hash) => {
+          User.create({
+            name, email, password: hash,
+          })
+            .then((user) => {
+              res.status(CREATE_OK).send({ data: user.toJSON() });
+            })
+            .catch((err) => {
+              if (err.name === VALIDATION_ERROR) {
+                return next(new BadRequestError(BAD_REQUEST_ERROR_MESSAGE));
+              } if (err.code === 11000) {
+                return next(new ConflictError(CONFLICT_ERROR_MESSAGE));
+              }
+              return next(err);
+            });
+        })
+        .catch(next);
     })
     .catch(next);
 };
@@ -97,14 +97,12 @@ module.exports.updateUser = (req, res, next) => {
       res.send({ data: user });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new ValidationError());
-      } if (err.message === 'NotValidId') {
-        return next(new NotFoundIdError('Пользователь по указанному _id не найден.'));
-      } if (err.name === 'ValidationError') {
-        return next(new WrongDataError('Переданы некорректные данные при обновлении профиля.'));
-      } if (err.name === 'IdError') {
-        return next(new NotFoundIdError('Пользователь по указанному _id не найден.'));
+      if (err.message === NOT_FOUND_USER_ERROR_MESSAGE) {
+        return next(new NotFoundIdError(NOT_FOUND_USER_ERROR_MESSAGE));
+      } if (err.name === VALIDATION_ERROR) {
+        return next(new BadRequestError(BAD_REQUEST_ERROR_MESSAGE));
+      } if (err.code === 11000) {
+        return next(new ConflictError(CONFLICT_ERROR_MESSAGE));
       }
       return next(err);
     });

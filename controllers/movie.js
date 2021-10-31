@@ -1,20 +1,20 @@
 const Movie = require('../models/movie');
 const NotFoundIdError = require('../errors/not-found-id-err');
-const ValidationError = require('../errors/cast-err');
-const WrongDataError = require('../errors/data_err');
 const NotPermissionError = require('../errors/permission-err');
+const BadRequestError = require('../errors/bad-request-err');
+const {
+  CREATE_OK,
+  VALIDATION_ERROR,
+  CAST_ERROR,
+  BAD_REQUEST_ERROR_MESSAGE,
+  PERMISSION_ERROR_MESSAGE,
+  NOT_FOUND_MOVIE_ERROR_MESSAGE,
 
-const CREATE_OK = 201;
+} = require('../utils/constants');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({})
     .then((movies) => res.send({ data: movies }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new WrongDataError('Переданы некорректные данные при создании карточки.');
-      }
-      next(err);
-    })
     .catch(next);
 };
 
@@ -43,30 +43,32 @@ module.exports.createMovie = (req, res, next) => {
       res.status(CREATE_OK).send({ data: movie });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new WrongDataError('Переданы некорректные данные при создании карточки.');
+      if (err.name === VALIDATION_ERROR) {
+        return next(new BadRequestError(BAD_REQUEST_ERROR_MESSAGE));
       }
-      next(err);
-    })
-    .catch(next);
+      return next(err);
+    });
 };
 
 module.exports.deleteMovie = (req, res, next) => {
   Movie.findById(req.params.movieId)
-    .orFail(() => new NotFoundIdError('Карточка с указанным _id не найдена.'))
+    .orFail(() => new NotFoundIdError(NOT_FOUND_MOVIE_ERROR_MESSAGE))
     .then((movie) => {
       if (String(movie.owner) !== req.user._id) {
-        next(new NotPermissionError('Нельзя удалить чужую карточку'));
-      } else {
-        Movie.deleteOne(movie)
-          .then(() => res.send({ data: movie }));
+        next(new NotPermissionError(PERMISSION_ERROR_MESSAGE));
       }
+      Movie.deleteOne(movie)
+        .then(() => res.send({ data: movie }))
+        .catch(next);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        throw new ValidationError();
+      if (err.name === CAST_ERROR) {
+        return next(new BadRequestError(BAD_REQUEST_ERROR_MESSAGE));
       }
-      next(err);
+      if (err.message === NOT_FOUND_MOVIE_ERROR_MESSAGE) {
+        return next(new NotFoundIdError(NOT_FOUND_MOVIE_ERROR_MESSAGE));
+      }
+      return next(err);
     })
     .catch(next);
 };

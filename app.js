@@ -24,7 +24,7 @@ app.use(requestLogger);
 app.use(limiter);
 app.use(router);
 
-mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : 'mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : 'mongodb://localhost:27017/moviesdb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   // useCreateIndex: true,

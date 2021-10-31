@@ -36,6 +36,11 @@ const validateUserUpdate = celebrate({
       .messages({
         'any.required': 'Поле "name" должно быть заполнено',
       }),
+    email: Joi.string().required().email()
+      .message('Поле "email" должно быть валидным email адресом')
+      .messages({
+        'string.required': 'Поле "email" должно быть заполнено',
+      }),
   }),
 });
 
@@ -93,7 +98,9 @@ const validateMovieBody = celebrate({
 
 const validateMovieDelete = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().hex().length(24),
+    // movieId: Joi.string().hex().length(24)
+    movieId: Joi.string().hex(),
+    //   .message('Поле "movieId" должно быть длиной 24 символа')
   }),
 });
 
