@@ -55,6 +55,7 @@ module.exports.deleteMovie = (req, res, next) => {
     .orFail(() => new NotFoundIdError(NOT_FOUND_MOVIE_ERROR_MESSAGE))
     .then((movie) => {
       if (String(movie.owner) !== req.user._id) {
+        // return next(new NotPermissionError(PERMISSION_ERROR_MESSAGE));
         next(new NotPermissionError(PERMISSION_ERROR_MESSAGE));
       }
       Movie.deleteOne(movie)
@@ -64,9 +65,6 @@ module.exports.deleteMovie = (req, res, next) => {
     .catch((err) => {
       if (err.name === CAST_ERROR) {
         return next(new BadRequestError(BAD_REQUEST_ERROR_MESSAGE));
-      }
-      if (err.message === NOT_FOUND_MOVIE_ERROR_MESSAGE) {
-        return next(new NotFoundIdError(NOT_FOUND_MOVIE_ERROR_MESSAGE));
       }
       return next(err);
     })

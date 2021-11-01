@@ -19,12 +19,7 @@ module.exports.getCurrentUser = (req, res, next) => {
     .then((user) => {
       res.send({ data: user });
     })
-    .catch((err) => {
-      if (err.message === NOT_FOUND_USER_ERROR_MESSAGE) {
-        return next(new NotFoundIdError(NOT_FOUND_USER_ERROR_MESSAGE));
-      }
-      return next(err);
-    });
+    .catch((err) => next(err));
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -97,9 +92,7 @@ module.exports.updateUser = (req, res, next) => {
       res.send({ data: user });
     })
     .catch((err) => {
-      if (err.message === NOT_FOUND_USER_ERROR_MESSAGE) {
-        return next(new NotFoundIdError(NOT_FOUND_USER_ERROR_MESSAGE));
-      } if (err.name === VALIDATION_ERROR) {
+      if (err.name === VALIDATION_ERROR) {
         return next(new BadRequestError(BAD_REQUEST_ERROR_MESSAGE));
       } if (err.code === 11000) {
         return next(new ConflictError(CONFLICT_ERROR_MESSAGE));
