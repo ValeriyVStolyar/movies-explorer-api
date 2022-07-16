@@ -9,12 +9,14 @@ const {
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
+    // match: /^[A-Z0-9._%+-]$/,
     minlength: 2,
     maxlength: 30,
     required: true,
   },
   email: {
     type: String,
+    // match: /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/,
     validate: {
       validator(v) {
         return validator.isEmail(v);
@@ -25,6 +27,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    // match: /^[A-Z0-9._%+-]$/,
     required: true,
     select: false,
   },

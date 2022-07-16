@@ -17,7 +17,8 @@ module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(new NotFoundIdError(NOT_FOUND_USER_ERROR_MESSAGE))
     .then((user) => {
-      res.send({ data: user });
+      // res.send({ data: user });
+      res.send({ user });
     })
     .catch((err) => next(err));
 };
@@ -56,7 +57,6 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign(
@@ -78,7 +78,7 @@ module.exports.login = (req, res, next) => {
 
 module.exports.logout = (req, res, next) => {
   res.clearCookie('jwt').send({ message: 'Cookies удалены' });
-  next();
+  // next();
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -89,7 +89,8 @@ module.exports.updateUser = (req, res, next) => {
   )
     .orFail(new NotFoundIdError('Пользователь по указанному _id не найден.'))
     .then((user) => {
-      res.send({ data: user });
+      // res.send({ data: user });
+      res.send({ user });
     })
     .catch((err) => {
       if (err.name === VALIDATION_ERROR) {
